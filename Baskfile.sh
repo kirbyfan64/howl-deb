@@ -12,7 +12,7 @@ task_changelog() {
 
 
 task_download() {
-  aria2c -x16 $UR
+  aria2c -x16 $URL
   tar xvf $TGZ
   mv howl-$HOWL_VER $DIR
   bask_depends update
