@@ -1,3 +1,4 @@
 *.tgz
 howl_*/
 out/
+local.sh

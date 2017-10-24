@@ -4,6 +4,16 @@ URL=https://github.com/howl-editor/howl/releases/download/$HOWL_VER/howl-$HOWL_V
 DIR=howl_$HOWL_VER
 DEFAULT_DISTROS='xenial zesty artful'
 
+[ -f local.sh ] && . local.sh
+
+
+parse_distros() {
+  if [[ -n "$@" ]]; then
+    distros="`echo "$@" | sed 's/-//g'`"
+  else
+    distros=$DEFAULT_DISTROS
+  fi
+}
 
 
 task_changelog() {
@@ -21,7 +31,7 @@ task_download() {
 
 task_update() {
   rm -rf $DIR/debian
-  cp -r debian $DIR/debain
+  cp -r debian $DIR/debian
 }
 
 
@@ -36,5 +46,23 @@ task_build() {
     mkdir -p out/$distro
     bask_run ddb build ubuntu:$distro out/$distro $DIR || return
     bask_run ddb build ubuntu:$distro out/$distro $DIR -a x86 || return
+  done
+}
+
+
+task_push() {
+  parse_distros "$@"
+
+  echo "$distros"
+
+  if [ -z "$REPREPRO_BASE_DIR" ]; then
+    bask_log_error "Set \$REPREPRO_BASE_DIR in 'local.sh'."
+    return 1
+  fi
+
+  export REPREPRO_BASE_DIR
+
+  for distro in $distros; do
+    bask_run reprepro -C $distro includedeb $distro out/$distro/*.deb || return
   done
 }
