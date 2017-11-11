@@ -1,4 +1,4 @@
-: ${HOWL_VER:=0.5.2}
+: ${HOWL_VER:=0.5.3}
 TGZ=howl-$HOWL_VER.tgz
 URL=https://github.com/howl-editor/howl/releases/download/$HOWL_VER/howl-$HOWL_VER.tgz
 DIR=howl_$HOWL_VER
@@ -17,7 +17,7 @@ parse_distros() {
 
 
 task_changelog() {
-  ./format-changelog.pl > $DIR/debian/changelog
+  ./format-changelog.pl $DIR/Changelog.md > $DIR/debian/changelog
 }
 
 
